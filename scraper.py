@@ -71,8 +71,8 @@ def save_posts(posts):
 def main ():
     current_posts = get_post_links()
     previous_posts = load_previous_posts()
-    new_posts = [post for post in current_posts if post not in load_previous_posts]
-
+    new_posts = current_posts
+    
     if new_posts:
         for post in new_posts:
             send_pushbullet_message(post)
