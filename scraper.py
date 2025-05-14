@@ -87,6 +87,8 @@ def main ():
 
     if new_posts:
         print(f"Sending notifications for {len(new_posts)} new posts...")  # Log notification 
+        send_pushbullet_message("TEST: This is a test Pushbullet notification from GitHub Actions")
+        send_email_notifications("TEST: This is a test email from GitHub Actions")
         for post in new_posts:
             send_pushbullet_message(post)
             send_email_notifications(post)
