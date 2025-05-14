@@ -7,20 +7,29 @@ import ssl
 
 #pushbullet set up
 def send_pushbullet_message(message):
+    print("Sending Pushbullet notification...")
     token = os.environ.get("PUSHBULLET_TOKEN")
     if not token:
         print("Pushbullet token not set")
         return
-    data={"type":"note","title":"New Flat Posted","body": message}
-    response = requests.post("https://api.pushbullet.com/v2/pushes",
-                            json=data,
-                            headers={"Acess-Token":token})
+    data={
+        "type":"note",
+        "title":"New Flat Posted",
+        "body": message
+    }
+    response = requests.post(
+        "https://api.pushbullet.com/v2/pushes",
+        json=data,
+        headers={"Access-Token":token}
+    )
     if response.status_code != 200:
         print("Failed to send Pushbullet notification")
+    else:
+        print("Pushbullet notification sent!")
 
 #email notification 
 def send_email_notifications(message):
-    email_address = os.environ.get ("EMAIL_ADRESS")
+    email_address = os.environ.get ("EMAIL_ADDRESS")
     email_password = os.environ.get ("EMAIL_PASSWORD")
     email_recipient = os.environ.get ("EMAIL_RECIPIENT")
 
@@ -36,6 +45,7 @@ def send_email_notifications(message):
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
             server.login(email_address, email_password)
             server.sendmail(email_address, email_recipient, email_text)
+        print ("Email sent succesfully!")
     except Exception as e:
         print (f" Failed to send email: {e}")
 
@@ -69,11 +79,14 @@ def save_posts(posts):
         json.dump(posts, f)
 
 def main ():
+    print("Running scrapper...") #log start
     current_posts = get_post_links()
+    print(f"Found {len(current_posts)} posts.") #how many posts
     previous_posts = load_previous_posts()
     new_posts = current_posts
-    
+
     if new_posts:
+        print(f"Sending notifications for {len(new_posts)} new posts...")  # Log notification 
         for post in new_posts:
             send_pushbullet_message(post)
             send_email_notifications(post)
