@@ -34,8 +34,8 @@ def send_email_notifications(message):
     try:
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-            server.login(email_adress, email_password)
-            server.sendmail(email_adress, email_recipient, email_text)
+            server.login(email_address, email_password)
+            server.sendmail(email_address, email_recipient, email_text)
     except Exception as e:
         print (f" Failed to send email: {e}")
 
@@ -70,8 +70,8 @@ def save_posts(posts):
 
 def main ():
     current_posts = get_post_links()
-    previous_posts = load_previous_posts ()
-    new_posts = [post for post in current_posts if post not in previous_post]
+    previous_posts = load_previous_posts()
+    new_posts = [post for post in current_posts if post not in load_previous_posts]
 
     if new_posts:
         for post in new_posts:
@@ -81,6 +81,6 @@ def main ():
     else:
         print("No new posts found.")
     
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
     
