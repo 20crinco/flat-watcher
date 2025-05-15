@@ -83,8 +83,8 @@ def main ():
     current_posts = get_post_links()
     print(f"Found {len(current_posts)} posts.") #how many posts
     previous_posts = load_previous_posts()
-    new_posts = current_posts
-
+    new_posts = [post for post in current_posts if post not in previous_posts]
+    
     if new_posts:
         print(f"Sending notifications for {len(new_posts)} new posts...")  # Log notification 
         send_pushbullet_message("TEST: This is a test Pushbullet notification from GitHub Actions")
