@@ -22,12 +22,12 @@ jobs:
         run: pip install -r requirements.txt
 
       # ✅ Download artifact, ignore error if it's missing
-      - name: Download saved posts
-        uses: actions/download-artifact@v3
-        with:
-          name: saved-posts
-          path: .
-        continue-on-error: true
+      #- name: Download saved posts
+      #  uses: actions/download-artifact@v3
+      #  with:
+      #    name: saved-posts
+        #  path: .
+    #    continue-on-error: true
 
       - name: Run scraper
         run: python scraper.py
