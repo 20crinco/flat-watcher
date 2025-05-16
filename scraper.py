@@ -82,9 +82,9 @@ def save_posts(posts):
 
 def main ():
     print("Running scrapper...") #log start
-    current_posts = ["Test Flat- https://example.com/test-flat"]
+    current_posts = get_post_links()
     print(f"Found {len(current_posts)} posts.") #how many posts
-    previous_posts = []
+    previous_posts = load_previous_posts()
     new_posts = [post for post in current_posts if post not in previous_posts]
     
     if new_posts:
