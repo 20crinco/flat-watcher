@@ -1,8 +1,6 @@
 name: scrape
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # every 5 minutes
   workflow_dispatch:
 
 jobs:
@@ -19,15 +17,7 @@ jobs:
           python-version: 3.x
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      # ✅ Download artifact, ignore error if it's missing
-      #- name: Download saved posts
-      #  uses: actions/download-artifact@v3
-      #  with:
-      #    name: saved-posts
-        #  path: .
-    #    continue-on-error: true
+        run: pip install requests beautifulsoup4
 
       - name: Run scraper
         run: python scraper.py
