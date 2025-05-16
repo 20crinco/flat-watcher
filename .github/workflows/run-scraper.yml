@@ -2,7 +2,7 @@ name: Run Flat Scraper
 
 on:
   schedule:
-    - cron: "0 * * * *"  # every hour
+    - cron: "*/8 * * * *"  # every 8 minutes
   workflow_dispatch:  # allow manual trigger
 
 jobs:
@@ -13,11 +13,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Download saved posts
+      - name: Try to download saved posts
         uses: actions/download-artifact@v3
         with:
           name: saved-posts
           path: .
+        continue-on-error: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
