@@ -78,29 +78,27 @@ def save_posts(posts):
     with open('data.json','w') as f:
         json.dump(posts, f)
 
-def main ():
-    print("Running scrapper...") #log start
+def main():
+    print("Running scrapper...")  # log start
     current_posts = get_post_links()
-    print(f"Found {len(current_posts)} posts.") #how many posts
+    print(f"Found {len(current_posts)} posts.")  # how many posts
     previous_posts = load_previous_posts()
     new_posts = [post for post in current_posts if post not in previous_posts]
-   
+
     # Prueba forzada para que siempre detecte 1 nuevo post
     new_posts = ["Test notification: This is a test post"]
-    
+
     if new_posts:
-    print(f"Sending notifications for {len(new_posts)} new posts...")
-    for post in new_posts:
-        for i in range(5):
-            send_pushbullet_message(post)
-            send_email_notifications(post)
+        print(f"Sending notifications for {len(new_posts)} new posts...")
+        for post in new_posts:
+            for i in range(5):
+                send_pushbullet_message(post)
+                send_email_notifications(post)
     else:
         print("No new posts found.")
 
-    save_posts(current_posts) #saving posts to ensure data.json is created
-    print(f"Saved {len(current_posts)} post to data.json.")
-    
+    save_posts(current_posts)  # saving posts to ensure data.json is created
+    print(f"Saved {len(current_posts)} post(s) to data.json.")
+
 if __name__ == "__main__":
     main()
-    
-		
