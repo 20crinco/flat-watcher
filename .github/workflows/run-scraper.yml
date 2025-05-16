@@ -3,7 +3,7 @@ name: scrape
 on:
   schedule:
     - cron: '*/5 * * * *'  # every 5 minutes
-  workflow_dispatch:       # manual trigger option
+  workflow_dispatch:
 
 jobs:
   run-scraper:
@@ -21,17 +21,17 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # ⬇️ Download artifact
+      # ✅ Download artifact, ignore error if it's missing
       - name: Download saved posts
         uses: actions/download-artifact@v3
         with:
           name: saved-posts
           path: .
+        continue-on-error: true
 
       - name: Run scraper
         run: python scraper.py
 
-      # ⬆️ Upload updated data.json
       - name: Upload saved posts
         uses: actions/upload-artifact@v3
         with:
