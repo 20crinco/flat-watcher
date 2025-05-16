@@ -1,11 +1,9 @@
-import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
-load_dotenv()
 import os
+import requests
 import json
 import smtplib
 import ssl
+from bs4 import BeautifulSoup
 
 #pushbullet set up
 def send_pushbullet_message(message):
