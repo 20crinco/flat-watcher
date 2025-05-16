@@ -3,7 +3,7 @@ name: scrape
 on:
   schedule:
     - cron: '*/5 * * * *'  # every 5 minutes
-  workflow_dispatch:       # allows you to trigger it manually from GitHub
+  workflow_dispatch:       # manual trigger option
 
 jobs:
   run-scraper:
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # ⬇️ STEP: Download saved data.json
+      # ⬇️ Download artifact
       - name: Download saved posts
         uses: actions/download-artifact@v3
         with:
@@ -31,27 +31,7 @@ jobs:
       - name: Run scraper
         run: python scraper.py
 
-      # ⬆️ STEP: Upload updated data.json
-      - name: Upload saved posts
-        uses: actions/upload-artifact@v3
-        with:
-          name: saved-posts
-          path: data.json
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run scraper
-        env:
-          PUSHBULLET_API_KEY: ${{ secrets.PUSHBULLET_API_KEY }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python scraper.py
-
+      # ⬆️ Upload updated data.json
       - name: Upload saved posts
         uses: actions/upload-artifact@v3
         with:
