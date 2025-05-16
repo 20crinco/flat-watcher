@@ -85,9 +85,6 @@ def main():
     previous_posts = load_previous_posts()
     new_posts = [post for post in current_posts if post not in previous_posts]
 
-    # Prueba forzada para que siempre detecte 1 nuevo post
-    new_posts = ["Test notification: This is a test post"]
-
     if new_posts:
         print(f"Sending notifications for {len(new_posts)} new posts...")
         for post in new_posts:
