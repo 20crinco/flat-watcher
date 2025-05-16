@@ -1,30 +1,36 @@
-name: Run Scraper
+name: Run scraper every 5 minutes
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'  # every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 jobs:
-  run-scraper:
+  scrape:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: 3.10
 
-      - name: Upgrade pip and install dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          pip install requests beautifulsoup4 python-dotenv
 
       - name: Run scraper
         run: python scraper.py
+
+      - name: Upload saved posts
+        uses: actions/upload-artifact@v4
+        with:
+          name: saved-posts
+          path: data.json
 
       - name: Upload data.json
         uses: actions/upload-artifact@v3
