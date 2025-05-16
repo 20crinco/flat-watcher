@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import json
 import smtplib
@@ -80,9 +82,9 @@ def save_posts(posts):
 
 def main ():
     print("Running scrapper...") #log start
-    current_posts = get_post_links()
+    current_posts = ["Test Flat- https://example.com/test-flat"]
     print(f"Found {len(current_posts)} posts.") #how many posts
-    previous_posts = load_previous_posts()
+    previous_posts = []
     new_posts = [post for post in current_posts if post not in previous_posts]
     
     if new_posts:
@@ -92,10 +94,13 @@ def main ():
         for post in new_posts:
             send_pushbullet_message(post)
             send_email_notifications(post)
-        save_posts(current_posts)
     else:
         print("No new posts found.")
+
+    save_posts(current_posts) #saving posts to ensure data.json is created
+    print(f"Saved {len(current_posts)} post to data.json.")
     
 if __name__ == "__main__":
     main()
     
+		
