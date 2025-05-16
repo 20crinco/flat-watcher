@@ -84,14 +84,18 @@ def main ():
     print(f"Found {len(current_posts)} posts.") #how many posts
     previous_posts = load_previous_posts()
     new_posts = [post for post in current_posts if post not in previous_posts]
+   
+    # Prueba forzada para que siempre detecte 1 nuevo post
+    new_posts = ["Test notification: This is a test post"]
     
     if new_posts:
         print(f"Sending notifications for {len(new_posts)} new posts...")  # Log notification 
         send_pushbullet_message("TEST: This is a test Pushbullet notification from GitHub Actions")
         send_email_notifications("TEST: This is a test email from GitHub Actions")
         for post in new_posts:
-            send_pushbullet_message(post)
-            send_email_notifications(post)
+	    for i in range (5):
+                send_pushbullet_message(post)
+                send_email_notifications(post)
     else:
         print("No new posts found.")
 
