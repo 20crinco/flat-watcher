@@ -31,9 +31,3 @@ jobs:
         with:
           name: saved-posts
           path: data.json
-
-      - name: Upload data.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: saved-posts
-          path: data.json
