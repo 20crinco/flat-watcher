@@ -94,8 +94,6 @@ def main ():
         for i in range(5):
             send_pushbullet_message(post)
             send_email_notifications(post)
-else:
-    print("No new posts found.")
     else:
         print("No new posts found.")
 
