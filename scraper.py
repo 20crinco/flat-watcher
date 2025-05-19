@@ -82,6 +82,11 @@ def main():
     print("Running scrapper...")  # log start
     current_posts = get_post_links()
     print(f"Found {len(current_posts)} posts.")  # how many posts
+    #print the extracted posts
+    print("current posts extracted:")
+    for post in current_posts:
+        print(post)
+        
     previous_posts = load_previous_posts()
     new_posts = [post for post in current_posts if post not in previous_posts]
 
