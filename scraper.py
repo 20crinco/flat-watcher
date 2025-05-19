@@ -53,7 +53,20 @@ def send_email_notifications(message):
 URL = "https://domus.ed.ac.uk/properties/?wpp_search%5Bsort_order%5D=ASC&wpp_search%5Bsort_by%5D=price&wpp_search%5Bpagination%5D=on&wpp_search%5Bper_page%5D=10&wpp_search%5Bstrict_search%5D=false&wpp_search%5Bproperty_type%5D=long_term_let&wpp_search%5Bsuitability%5D=-1&wpp_search%5Bproperty_address%5D=&wpp_search%5Bneighbourhood%5D=-1&wpp_search%5Bbedrooms%5D=-1&wpp_search%5Brental_price%5D%5Bmin%5D=&wpp_search%5Brental_price%5D%5Bmax%5D=&wpp_search%5Bavailability_date%5D%5Bfrom%5D=&wpp_search%5Bavailability_date%5D%5Bto%5D="
 
 def get_post_links():
-    response = requests.get(URL)
+        # ✅ Add headers to mimic a real browser
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/112.0.0.0 Safari/537.36"
+        )
+    }
+    response = requests.get(URL, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Failed to fetch listings. Status code: {response.status_code}")
+        return []
+        
     soup = BeautifulSoup(response.text, 'html.parser')
     listings = soup.find_all('div', class_="property-overview-wrapper")
     #using title + URL as unique identifier
