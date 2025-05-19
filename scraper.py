@@ -55,15 +55,16 @@ URL = "https://domus.ed.ac.uk/properties/?wpp_search%5Bsort_order%5D=ASC&wpp_sea
 def get_post_links():
     response = requests.get(URL)
     soup = BeautifulSoup(response.text, 'html.parser')
-    listings = soup.find_all('div', class_='property-overview')
-    #using title + URL as unique identifier
-    posts= []
+
+    listings = soup.find_all('div', class_='property-overview-wrapper')
+    print(f"Found {len(listings)} listings on page.")  # ✅ New log for debugging
+
+    posts = []
     for listing in listings:
-        title_tag = listing.find('h2', class_='property-title')
-        link_tag = title_tag.find('a') if title_tag else None
-        if title_tag and link_tag:
-            title = title_tag.text.strip()
-            link = link_tag ['href']
+        link_tag = listing.find('a', class_='property-title-link')
+        if link_tag:
+            title = link_tag.find('h3').text.strip() if link_tag.find('h3') else 'No Title'
+            link = link_tag['href']
             full_link = f"https://domus.ed.ac.uk{link}"
             posts.append(f"{title} - {full_link}")
     return posts
