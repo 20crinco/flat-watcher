@@ -53,7 +53,20 @@ def send_email_notifications(message):
 URL = "https://domus.ed.ac.uk/properties/?wpp_search%5Bsort_order%5D=ASC&wpp_search%5Bsort_by%5D=price&wpp_search%5Bpagination%5D=on&wpp_search%5Bper_page%5D=10&wpp_search%5Bstrict_search%5D=false&wpp_search%5Bproperty_type%5D=long_term_let&wpp_search%5Bsuitability%5D=-1&wpp_search%5Bproperty_address%5D=&wpp_search%5Bneighbourhood%5D=-1&wpp_search%5Bbedrooms%5D=-1&wpp_search%5Brental_price%5D%5Bmin%5D=&wpp_search%5Brental_price%5D%5Bmax%5D=&wpp_search%5Bavailability_date%5D%5Bfrom%5D=&wpp_search%5Bavailability_date%5D%5Bto%5D="
 
 def get_post_links():
-    response = requests.get(URL)
+        # ✅ Add headers to mimic a real browser
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/112.0.0.0 Safari/537.36"
+        )
+    }
+    response = requests.get(URL, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Failed to fetch listings. Status code: {response.status_code}")
+        return []
+        
     soup = BeautifulSoup(response.text, 'html.parser')
 
     listings = soup.find_all('div', class_='property-overview-wrapper')
@@ -79,27 +92,29 @@ def save_posts(posts):
     with open('data.json','w') as f:
         json.dump(posts, f)
 
-def main ():
-    print("Running scrapper...") #log start
+def main():
+    print("Running scrapper...")  # log start
     current_posts = get_post_links()
-    print(f"Found {len(current_posts)} posts.") #how many posts
+    print(f"Found {len(current_posts)} posts.")  # how many posts
+    #print the extracted posts
+    print("current posts extracted:")
+    for post in current_posts:
+        print(post)
+        
     previous_posts = load_previous_posts()
     new_posts = [post for post in current_posts if post not in previous_posts]
-    
+
     if new_posts:
-        print(f"Sending notifications for {len(new_posts)} new posts...")  # Log notification 
-        send_pushbullet_message("TEST: This is a test Pushbullet notification from GitHub Actions")
-        send_email_notifications("TEST: This is a test email from GitHub Actions")
+        print(f"Sending notifications for {len(new_posts)} new posts...")
         for post in new_posts:
-            send_pushbullet_message(post)
-            send_email_notifications(post)
+            for i in range(5):
+                send_pushbullet_message(post)
+                send_email_notifications(post)
     else:
         print("No new posts found.")
 
-    save_posts(current_posts) #saving posts to ensure data.json is created
-    print(f"Saved {len(current_posts)} post to data.json.")
-    
+    save_posts(current_posts)  # saving posts to ensure data.json is created
+    print(f"Saved {len(current_posts)} post(s) to data.json.")
+
 if __name__ == "__main__":
     main()
-    
-		
